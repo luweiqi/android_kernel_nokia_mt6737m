@@ -111,10 +111,6 @@ static ssize_t gt1x_fw_ver_read_proc(struct file *file, char __user * page, size
 #if 0
 	length = sprintf(buf_temp, "GT%s_%06X_%04X_%02X\n", \
 			ver_info.product_id, ver_info.patch_id, ver_info.mask_id, ver_info.sensor_id);
-#else
-	length = sprintf(buf_temp, "00_%04X_%06X__%02X\n",
-			ver_info.mask_id, ver_info.patch_id, ver_info.sensor_id);
-#endif
 	ret = copy_to_user(page, buf_temp, length+1);
 
 	if(ret != 0){
@@ -124,6 +120,12 @@ static ssize_t gt1x_fw_ver_read_proc(struct file *file, char __user * page, size
 
 	*ppos += length + 1;
 	return (length + 1);
+#else
+	length = snprintf(buf_temp, 29, "00_%04X_%06X_%02X\n",
+			ver_info.mask_id, ver_info.patch_id, ver_info.sensor_id);
+
+	return simple_read_from_buffer(page, size, ppos, buf_temp, length + 1);
+#endif
 }
 
 static ssize_t gt1x_fw_ver_write_proc(struct file *file, const char *buffer, size_t count, loff_t * ppos)
@@ -993,7 +995,7 @@ s32 gt1x_read_version(struct gt1x_version_info * ver_info)
 
 	if (retry <= 0) {
 		if (ver_info)
-			ver_info->sensor_id = 0;
+			ver_info->sensor_id = 0xff;
 		return -1;
 	}
 

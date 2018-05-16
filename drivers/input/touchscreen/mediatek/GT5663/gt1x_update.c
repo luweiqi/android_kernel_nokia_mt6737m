@@ -250,8 +250,9 @@ u32 getUint(u8 * buffer, int len)
 
 int gt1x_auto_update_proc(void *data)
 {
+#if 0
 	u8 config_version = 0;
-
+#endif
 #ifdef CONFIG_GTP_HEADER_FW_UPDATE
 	GTP_INFO("Start auto update thread from head...");
 	gt1x_update_firmware(NULL);
@@ -288,6 +289,11 @@ int gt1x_auto_update_proc(void *data)
 		}
 
 		if (gt1x_parse_config(filename, config) > 0) {
+		/*
+			Do not judge the version, every power on phone
+			It will send to tp ic.
+		*/
+		#if 0
 			//judge config version start
 			GTP_INFO("firefly judge the update config version start...");
 			ret = gt1x_i2c_read(GTP_REG_CONFIG_DATA, &config_version, 1);
@@ -303,6 +309,7 @@ int gt1x_auto_update_proc(void *data)
 				return 0;
 			}
 			//judge config version end
+		#endif
 			ret = gt1x_i2c_write(GTP_REG_CONFIG_DATA, config, GTP_CONFIG_ORG_LENGTH);
 			if (ret < 0) {
 				GTP_ERROR("Update config failed!");

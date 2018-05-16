@@ -187,7 +187,7 @@
 #define TEMPERATURE_T3 50
 #define TEMPERATURE_T 255 /* This should be fixed, never change the value*/
 
-#define FG_METER_RESISTANCE 0
+#define FG_METER_RESISTANCE 90
 
 /* Qmax for battery  */
 #define Q_MAX_POS_50 2202
@@ -231,7 +231,8 @@
 
 /* fg 2.0 */
 #define DIFFERENCE_HWOCV_RTC		30
-#define DIFFERENCE_HWOCV_SWOCV		5
+#define DIFFERENCE_HWOCV_SWOCV		15
+#define DIFFERENCE_HWOCV_SWOCV_CHR	5
 #define DIFFERENCE_SWOCV_RTC		10
 #define MAX_SWOCV			3
 

@@ -607,10 +607,12 @@ void arch_reset(char mode, const char *cmd)
 		mtk_wd_SetNonResetReg2(0x0, 1);
 #endif
 	}
+#ifdef ADBREBOOT_FTM_USEIN_USERDEBUG
 	else if(cmd && !strcmp(cmd, "ftm"))      //FTM
 	{
 		rtc_mark_ftm();
 	}
+#endif
 	else if(cmd && !strcmp(cmd, "ftm_n"))      //FTM_N
 	{
 		rtc_mark_ftm_n();

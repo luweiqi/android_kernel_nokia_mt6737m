@@ -604,6 +604,7 @@ typedef enum {
 
 int __batt_meter_init_cust_data_from_cust_header(struct platform_device *dev)
 {
+	unsigned int ret=0,val=0;
 	fgauge_get_profile_id();
 
 	/* cust_battery_meter_table.h */
@@ -786,8 +787,17 @@ int __batt_meter_init_cust_data_from_cust_header(struct platform_device *dev)
 	batt_meter_cust_data.fg_vbat_average_size = FG_VBAT_AVERAGE_SIZE;
 	batt_meter_cust_data.r_fg_value = R_FG_VALUE;
 
+	ret=pmic_read_interface((unsigned int)(MT6328_CHR_CON0),
+				(&val),
+				(unsigned int)(MT6328_PMIC_RGS_CHRDET_MASK),
+				(unsigned int)(MT6328_PMIC_RGS_CHRDET_SHIFT)
+				);
+
 	batt_meter_cust_data.difference_hwocv_rtc = DIFFERENCE_HWOCV_RTC;
-	batt_meter_cust_data.difference_hwocv_swocv = DIFFERENCE_HWOCV_SWOCV;
+	if(val==1)
+		batt_meter_cust_data.difference_hwocv_swocv = DIFFERENCE_HWOCV_SWOCV_CHR;
+	else
+		batt_meter_cust_data.difference_hwocv_swocv = DIFFERENCE_HWOCV_SWOCV;
 	batt_meter_cust_data.difference_swocv_rtc = DIFFERENCE_SWOCV_RTC;
 	batt_meter_cust_data.max_swocv = MAX_SWOCV;
 
